@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Discover Your Tech Personality</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <!-- START SCREEN -->
+      <div class="screen active" id="start-screen">
+        <h1>Discover Your Tech Personality</h1>
+        <p>Answer fun questions and discover your tech personality ⭐</p>
+        <button id="start-btn">Let's Begin</button>
+      </div>
+
+      <!-- QUIZ SCREEN -->
+      <div class="screen" id="quiz-screen">
+        <div class="quiz-header">
+          <h2 id="question-text">Question goes here</h2>
+
+          <div class="quiz-info">
+            <p>
+              Question <span id="current-question">1</span> of
+              <span id="total-questions">10</span>
+            </p>
+
+            <p>Score: <span id="score">0</span></p>
+          </div>
+        </div>
+
+        <div id="answer-buttons" class="answers-container"></div>
+
+        <div class="progress-bar">
+          <div id="progress" class="progress"></div>
+        </div>
+      </div>
+
+      <!-- RESULT SCREEN -->
+      <div class="screen" id="result-screen">
+        <h1>Your Result</h1>
+
+        <div class="result-info">
+          <p>
+            Your Score:
+            <span id="final-score">0</span>
+            /
+            <span id="max-score">10</span>
+          </p>
+
+          <div id="result-message">Amazing!</div>
+        </div>
+
+        <button id="restart-btn">Restart Quiz</button>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
