@@ -1,0 +1,536 @@
+/* ============================================================
+   HANGMAN — DUNGEON THEME
+   style.css
+   ============================================================ */
+
+/* ---------- CSS Variables ---------- */
+:root {
+  --bg-dark: #0d0b0f;
+  --bg-card: #15121a;
+  --bg-card2: #1c1826;
+  --accent-gold: #c9972b;
+  --accent-ember: #e05c2a;
+  --accent-pale: #e8d9b0;
+  --text-main: #e8d9b0;
+  --text-muted: #8a7a5e;
+  --text-dim: #544a38;
+  --border: rgba(201, 151, 43, 0.22);
+  --shadow-gold: 0 0 18px rgba(201, 151, 43, 0.25);
+  --radius-lg: 18px;
+  --radius-md: 10px;
+  --radius-sm: 6px;
+  --font-display: "UnifrakturMaguntia", cursive;
+  --font-title: "Cinzel", serif;
+  --font-mono: "Courier Prime", monospace;
+}
+
+/* ---------- Reset & Base ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100vh;
+  background: var(--bg-dark);
+  background-image:
+    radial-gradient(
+      ellipse 80% 60% at 20% 10%,
+      rgba(201, 151, 43, 0.07) 0%,
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse 60% 50% at 80% 90%,
+      rgba(224, 92, 42, 0.06) 0%,
+      transparent 60%
+    );
+  font-family: var(--font-mono);
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+  overflow-x: hidden;
+}
+
+/* ---------- Ambient Particles ---------- */
+.particles {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.particle {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--accent-gold);
+  opacity: 0;
+  animation: float-up var(--dur, 8s) ease-in infinite;
+  animation-delay: var(--delay, 0s);
+}
+
+@keyframes float-up {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.45;
+  }
+  85% {
+    opacity: 0.2;
+  }
+  100% {
+    transform: translateY(-110vh) scale(0.3);
+    opacity: 0;
+  }
+}
+
+/* ---------- Game Wrapper ---------- */
+.game-wrapper {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 860px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  box-shadow:
+    0 0 0 1px rgba(201, 151, 43, 0.08),
+    0 8px 60px rgba(0, 0, 0, 0.7),
+    var(--shadow-gold);
+  padding: 36px 32px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+/* ---------- Header ---------- */
+.game-header {
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 22px;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 6vw, 3.8rem);
+  color: var(--accent-gold);
+  letter-spacing: 0.04em;
+  text-shadow:
+    0 0 30px rgba(201, 151, 43, 0.5),
+    0 2px 8px rgba(0, 0, 0, 0.8);
+  line-height: 1;
+}
+
+.subtitle {
+  font-family: var(--font-title);
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-top: 6px;
+}
+
+/* ---------- Game Area Layout ---------- */
+.game-area {
+  display: flex;
+  gap: 32px;
+  align-items: flex-start;
+}
+
+/* ---------- Gallows Section ---------- */
+.gallows-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  flex-shrink: 0;
+}
+
+#hangmanCanvas {
+  background: var(--bg-card2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.5);
+}
+
+/* ---------- Attempts / Hearts ---------- */
+.attempts-bar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.attempts-label {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--text-muted);
+  font-family: var(--font-title);
+}
+
+.hearts {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.heart {
+  font-size: 1.1rem;
+  transition:
+    transform 0.3s,
+    filter 0.3s;
+}
+
+.heart.lost {
+  filter: grayscale(1) brightness(0.4);
+  transform: scale(0.85);
+}
+
+/* ---------- Word Section ---------- */
+.word-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+}
+
+/* Category badge */
+.category-badge {
+  display: inline-block;
+  background: rgba(201, 151, 43, 0.12);
+  border: 1px solid rgba(201, 151, 43, 0.25);
+  border-radius: 99px;
+  padding: 4px 14px;
+  font-size: 0.72rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent-gold);
+  font-family: var(--font-title);
+  width: fit-content;
+}
+
+/* ---------- Word Display ---------- */
+.word-display {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  min-height: 60px;
+  align-items: flex-end;
+}
+
+.letter-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.letter-char {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: clamp(1.4rem, 4vw, 2rem);
+  color: var(--accent-pale);
+  min-width: 28px;
+  text-align: center;
+  height: 36px;
+  line-height: 36px;
+  transition: all 0.3s ease;
+  opacity: 0;
+  transform: translateY(-8px);
+}
+
+.letter-char.revealed {
+  opacity: 1;
+  transform: translateY(0);
+  color: var(--accent-gold);
+  text-shadow: 0 0 12px rgba(201, 151, 43, 0.6);
+  animation: pop-in 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.letter-char.hidden-char {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@keyframes pop-in {
+  0% {
+    transform: scale(0.5) translateY(-10px);
+  }
+  60% {
+    transform: scale(1.2) translateY(0);
+  }
+  100% {
+    transform: scale(1) translateY(0);
+  }
+}
+
+.letter-line {
+  width: 28px;
+  height: 2px;
+  background: var(--text-dim);
+  border-radius: 2px;
+}
+
+/* Space between words */
+.word-space {
+  width: 14px;
+}
+
+/* ---------- Wrong Letters ---------- */
+.wrong-letters-area {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.wrong-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--text-muted);
+  font-family: var(--font-title);
+  white-space: nowrap;
+}
+
+.wrong-letters {
+  font-size: 0.9rem;
+  color: var(--accent-ember);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+/* ---------- Keyboard ---------- */
+.keyboard {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.key-btn {
+  width: 36px;
+  height: 36px;
+  background: var(--bg-card2);
+  border: 1px solid rgba(201, 151, 43, 0.2);
+  border-radius: var(--radius-sm);
+  color: var(--text-main);
+  font-family: var(--font-title);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  letter-spacing: 0.04em;
+  position: relative;
+  overflow: hidden;
+}
+
+.key-btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--accent-gold);
+  opacity: 0;
+  transition: opacity 0.18s;
+}
+
+.key-btn:hover:not(:disabled)::after {
+  opacity: 0.12;
+}
+.key-btn:active:not(:disabled) {
+  transform: scale(0.9);
+}
+
+.key-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.28;
+  border-color: transparent;
+}
+
+.key-btn.correct {
+  background: rgba(80, 160, 80, 0.25);
+  border-color: rgba(80, 200, 80, 0.4);
+  color: #7ddb7d;
+  opacity: 1 !important;
+}
+
+.key-btn.wrong {
+  background: rgba(200, 60, 30, 0.2);
+  border-color: rgba(200, 60, 30, 0.35);
+  color: var(--accent-ember);
+  opacity: 1 !important;
+}
+
+/* ---------- Restart Button ---------- */
+.restart-btn {
+  width: fit-content;
+  padding: 10px 26px;
+  background: transparent;
+  border: 1px solid rgba(201, 151, 43, 0.35);
+  border-radius: 99px;
+  color: var(--accent-gold);
+  font-family: var(--font-title);
+  font-size: 0.78rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.22s ease;
+}
+
+.restart-btn:hover {
+  background: rgba(201, 151, 43, 0.12);
+  border-color: var(--accent-gold);
+  box-shadow: 0 0 14px rgba(201, 151, 43, 0.2);
+  transform: translateY(-1px);
+}
+
+/* ---------- Overlay ---------- */
+.overlay {
+  position: absolute;
+  inset: 0;
+  border-radius: 24px;
+  background: rgba(13, 11, 15, 0.88);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  animation: fade-in 0.4s ease;
+}
+
+.overlay.hidden {
+  display: none;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.overlay-card {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  animation: slide-up 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.overlay-icon {
+  font-size: 4rem;
+  line-height: 1;
+  filter: drop-shadow(0 0 20px rgba(201, 151, 43, 0.6));
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.08);
+  }
+}
+
+.overlay-title {
+  font-family: var(--font-display);
+  font-size: 3rem;
+  color: var(--accent-gold);
+  text-shadow: 0 0 30px rgba(201, 151, 43, 0.5);
+}
+
+.overlay-msg {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.overlay-msg strong {
+  color: var(--accent-pale);
+  font-size: 1.2rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.overlay-btn {
+  margin-top: 8px;
+  padding: 12px 40px;
+  background: linear-gradient(135deg, var(--accent-gold), var(--accent-ember));
+  border: none;
+  border-radius: 99px;
+  color: #0d0b0f;
+  font-family: var(--font-title);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.22s ease;
+  box-shadow: 0 4px 20px rgba(201, 151, 43, 0.35);
+}
+
+.overlay-btn:hover {
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 8px 28px rgba(201, 151, 43, 0.5);
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 620px) {
+  .game-wrapper {
+    padding: 22px 16px 20px;
+    gap: 18px;
+  }
+
+  .game-area {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .gallows-section {
+    width: 100%;
+  }
+
+  #hangmanCanvas {
+    width: 180px;
+    height: 210px;
+    display: block;
+    margin: 0 auto;
+  }
+
+  .word-section {
+    width: 100%;
+  }
+
+  .key-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 0.72rem;
+  }
+}

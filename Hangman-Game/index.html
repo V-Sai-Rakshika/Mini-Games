@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hangman — The Dungeon Word</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Cinzel:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- Ambient background particles -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Main game card -->
+    <div class="game-wrapper">
+      <!-- Header -->
+      <header class="game-header">
+        <h1 class="title">⚔ Hangman ⚔</h1>
+        <p class="subtitle">Guess the word before the rope tightens</p>
+      </header>
+
+      <!-- Game area: gallows + word + keyboard -->
+      <main class="game-area">
+        <!-- Left: gallows canvas + attempts -->
+        <section class="gallows-section">
+          <canvas id="hangmanCanvas" width="220" height="260"></canvas>
+
+          <!-- Wrong attempts tracker -->
+          <div class="attempts-bar">
+            <span class="attempts-label">Wrong guesses:</span>
+            <div class="hearts" id="heartsContainer">
+              <!-- Filled by JS -->
+            </div>
+          </div>
+        </section>
+
+        <!-- Right: word + clue + keyboard -->
+        <section class="word-section">
+          <!-- Category hint -->
+          <div class="category-badge" id="categoryBadge">Category: —</div>
+
+          <!-- Hidden word blanks -->
+          <div class="word-display" id="wordDisplay">
+            <!-- Filled by JS -->
+          </div>
+
+          <!-- Wrong letters list -->
+          <div class="wrong-letters-area">
+            <span class="wrong-label">Wrong letters:</span>
+            <span class="wrong-letters" id="wrongLetters">—</span>
+          </div>
+
+          <!-- On-screen keyboard -->
+          <div class="keyboard" id="keyboard">
+            <!-- Filled by JS (A–Z) -->
+          </div>
+
+          <!-- Restart button -->
+          <button class="restart-btn" id="restartBtn">↺ New Word</button>
+        </section>
+      </main>
+
+      <!-- Overlay: win / lose message -->
+      <div class="overlay hidden" id="overlay">
+        <div class="overlay-card">
+          <div class="overlay-icon" id="overlayIcon">🏆</div>
+          <h2 class="overlay-title" id="overlayTitle">You Won!</h2>
+          <p class="overlay-msg" id="overlayMsg">
+            The word was <strong id="revealWord"></strong>
+          </p>
+          <button class="overlay-btn" id="overlayBtn">Play Again</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
