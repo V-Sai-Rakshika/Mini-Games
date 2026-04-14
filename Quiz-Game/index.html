@@ -3,58 +3,159 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Discover Your Tech Personality</title>
+    <title>Tech Personality Quiz</title>
     <link rel="stylesheet" href="style.css" />
+    <!-- Google Fonts: Syne (display) + JetBrains Mono (body/code feel) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
-    <div class="container">
-      <!-- START SCREEN -->
-      <div class="screen active" id="start-screen">
-        <h1>Discover Your Tech Personality</h1>
-        <p>Answer fun questions and discover your tech personality ⭐</p>
-        <button id="start-btn">Let's Begin</button>
-      </div>
+    <!-- Animated background grid -->
+    <div class="bg-grid"></div>
+    <div class="bg-glow"></div>
 
-      <!-- QUIZ SCREEN -->
-      <div class="screen" id="quiz-screen">
-        <div class="quiz-header">
-          <h2 id="question-text">Question goes here</h2>
+    <!-- ═══════════════════════════════════════════ -->
+    <!--  SCREEN 1: WELCOME                         -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div id="screen-welcome" class="screen active">
+      <div class="card welcome-card">
+        <div class="logo-badge">⚡</div>
+        <h1 class="title glitch" data-text="TECH DNA">TECH DNA</h1>
+        <p class="subtitle">
+          Discover your true tech personality in<br /><span class="accent"
+            >10 rapid-fire questions</span
+          >
+        </p>
 
-          <div class="quiz-info">
-            <p>
-              Question <span id="current-question">1</span> of
-              <span id="total-questions">10</span>
-            </p>
+        <ul class="traits-preview">
+          <li>🎨 Frontend Wizard</li>
+          <li>⚙️ Backend Brain</li>
+          <li>🚀 Full Stack Beast</li>
+          <li>✨ UI/UX Creator</li>
+          <li>🔐 Cyber Guardian</li>
+          <li>📊 Data Detective</li>
+          <li>🤖 AI Innovator</li>
+          <li>📱 Mobile Maker</li>
+        </ul>
 
-            <p>Score: <span id="score">0</span></p>
-          </div>
-        </div>
+        <button id="btn-start" class="btn btn-primary pulse">
+          <span>Decode My DNA</span>
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+          >
+            <path d="M5 12h14M12 5l7 7-7 7" />
+          </svg>
+        </button>
 
-        <div id="answer-buttons" class="answers-container"></div>
-
-        <div class="progress-bar">
-          <div id="progress" class="progress"></div>
-        </div>
-      </div>
-
-      <!-- RESULT SCREEN -->
-      <div class="screen" id="result-screen">
-        <h1>Your Result</h1>
-
-        <div class="result-info">
-          <p>
-            Your Score:
-            <span id="final-score">0</span>
-            /
-            <span id="max-score">10</span>
-          </p>
-
-          <div id="result-message">Amazing!</div>
-        </div>
-
-        <button id="restart-btn">Restart Quiz</button>
+        <p class="hint">No login · No signup · Just vibes</p>
       </div>
     </div>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!--  SCREEN 2: QUIZ                            -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div id="screen-quiz" class="screen">
+      <div class="card quiz-card">
+        <!-- Header: progress + counter -->
+        <div class="quiz-header">
+          <span id="q-counter" class="q-counter">Q 1 / 10</span>
+          <span id="q-category" class="q-category">Loading…</span>
+        </div>
+
+        <!-- Progress bar -->
+        <div class="progress-track">
+          <div id="progress-fill" class="progress-fill"></div>
+        </div>
+
+        <!-- Question text -->
+        <p id="question-text" class="question-text">…</p>
+
+        <!-- Answer options grid -->
+        <div id="options-grid" class="options-grid">
+          <!-- Injected by JS -->
+        </div>
+
+        <!-- Next button (hidden until answer chosen) -->
+        <button id="btn-next" class="btn btn-next hidden">
+          <span>Next</span>
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+          >
+            <path d="M5 12h14M12 5l7 7-7 7" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!--  SCREEN 3: RESULT                          -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div id="screen-result" class="screen">
+      <div class="card result-card">
+        <p class="result-label">Your Tech Personality is…</p>
+        <div id="result-emoji" class="result-emoji">🚀</div>
+        <h2 id="result-title" class="result-title">Full Stack Beast</h2>
+        <p id="result-desc" class="result-desc">Loading your profile…</p>
+
+        <!-- Trait chips -->
+        <div id="result-traits" class="result-traits"></div>
+
+        <!-- Rarity badge -->
+        <div id="result-rarity" class="rarity-badge">🔥 Rare Type</div>
+
+        <!-- Action buttons -->
+        <div class="result-actions">
+          <button id="btn-restart" class="btn btn-secondary">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+            >
+              <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+              <path d="M3 3v5h5" />
+            </svg>
+            Retake Quiz
+          </button>
+          <button id="btn-share" class="btn btn-primary">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+            >
+              <circle cx="18" cy="5" r="3" />
+              <circle cx="6" cy="12" r="3" />
+              <circle cx="18" cy="19" r="3" />
+              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+              <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+            </svg>
+            Share Result
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast notification for share -->
+    <div id="toast" class="toast">✅ Copied to clipboard!</div>
 
     <script src="script.js"></script>
   </body>
