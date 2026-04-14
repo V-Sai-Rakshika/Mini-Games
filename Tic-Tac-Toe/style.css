@@ -1,0 +1,518 @@
+/* ============================================================
+   STYLE.CSS — Tic Tac Toe | Neon Arena Theme
+   ============================================================ */
+
+/* ---------- CSS Variables (Design Tokens) ---------- */
+:root {
+  --bg: #080c14;
+  --card-bg: #0d1424;
+  --card-border: #1e2d4a;
+  --x-color: #00e5ff; /* Cyan for X */
+  --o-color: #ff4d6d; /* Red-pink for O */
+  --draw-color: #ffd166; /* Gold for Draw */
+  --cell-bg: #111c30;
+  --cell-hover: #162240;
+  --cell-border: #1e2d4a;
+  --win-glow-x: 0 0 18px #00e5ff, 0 0 36px #00e5ff55;
+  --win-glow-o: 0 0 18px #ff4d6d, 0 0 36px #ff4d6d55;
+  --text-main: #e0eaff;
+  --text-muted: #5a7090;
+  --font-display: "Orbitron", monospace;
+  --font-body: "Rajdhani", sans-serif;
+  --radius-card: 24px;
+  --radius-cell: 14px;
+  --transition: 0.18s ease;
+}
+
+/* ---------- Reset & Base ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--bg);
+  font-family: var(--font-body);
+  color: var(--text-main);
+  overflow-x: hidden;
+  padding: 20px;
+}
+
+/* ---------- Background Grid ---------- */
+.bg-grid {
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0, 229, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 229, 255, 0.04) 1px, transparent 1px);
+  background-size: 44px 44px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ---------- Game Card ---------- */
+.game-card {
+  position: relative;
+  z-index: 1;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-card);
+  padding: 36px 32px 32px;
+  width: 100%;
+  max-width: 440px;
+  box-shadow:
+    0 0 0 1px #1e2d4a,
+    0 20px 60px rgba(0, 0, 0, 0.6),
+    0 0 80px rgba(0, 229, 255, 0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+}
+
+/* ---------- Header ---------- */
+.game-header {
+  text-align: center;
+}
+
+.game-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 6vw, 2.4rem);
+  font-weight: 900;
+  letter-spacing: 4px;
+  color: var(--text-main);
+  text-shadow: 0 0 20px rgba(0, 229, 255, 0.3);
+}
+
+.game-title span {
+  color: var(--x-color);
+  text-shadow: 0 0 16px var(--x-color);
+}
+
+.game-subtitle {
+  font-family: var(--font-display);
+  font-size: 0.65rem;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* ---------- Mode Toggle ---------- */
+.mode-toggle {
+  display: flex;
+  background: #0a1220;
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 4px;
+  gap: 4px;
+  width: 100%;
+}
+
+.mode-btn {
+  flex: 1;
+  padding: 9px 12px;
+  border: none;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--text-muted);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition);
+  letter-spacing: 0.5px;
+}
+
+.mode-btn.active {
+  background: linear-gradient(135deg, #0f2040, #162850);
+  color: var(--x-color);
+  box-shadow: 0 0 12px rgba(0, 229, 255, 0.15);
+  border: 1px solid rgba(0, 229, 255, 0.2);
+}
+
+.mode-btn:hover:not(.active) {
+  color: var(--text-main);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* ---------- Turn Banner ---------- */
+.turn-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #0a1220;
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 10px 22px;
+  width: 100%;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.turn-icon {
+  font-size: 1.4rem;
+  font-weight: 900;
+  font-family: var(--font-display);
+  line-height: 1;
+}
+
+.turn-text {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+/* X turn styling */
+.turn-banner.x-turn .turn-icon {
+  color: var(--x-color);
+  text-shadow: 0 0 10px var(--x-color);
+}
+.turn-banner.x-turn .turn-text {
+  color: var(--x-color);
+}
+
+/* O turn styling */
+.turn-banner.o-turn .turn-icon {
+  color: var(--o-color);
+  text-shadow: 0 0 10px var(--o-color);
+}
+.turn-banner.o-turn .turn-text {
+  color: var(--o-color);
+}
+
+/* ---------- Board ---------- */
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  width: 100%;
+  aspect-ratio: 1;
+}
+
+/* ---------- Cell ---------- */
+.cell {
+  background: var(--cell-bg);
+  border: 1px solid var(--cell-border);
+  border-radius: var(--radius-cell);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 8vw, 2.8rem);
+  font-weight: 900;
+  transition:
+    background var(--transition),
+    transform var(--transition),
+    box-shadow var(--transition);
+  aspect-ratio: 1;
+  user-select: none;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Hover ripple background */
+.cell::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-cell);
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 255, 255, 0.06) 0%,
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.cell:hover:not(.taken):not(.disabled)::before {
+  opacity: 1;
+}
+
+.cell:hover:not(.taken):not(.disabled) {
+  background: var(--cell-hover);
+  transform: scale(1.04);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.cell:active:not(.taken):not(.disabled) {
+  transform: scale(0.96);
+}
+
+/* X Mark */
+.cell.x {
+  color: var(--x-color);
+  box-shadow: inset 0 0 0 1px rgba(0, 229, 255, 0.15);
+  text-shadow: 0 0 12px var(--x-color);
+  animation: popIn 0.22s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* O Mark */
+.cell.o {
+  color: var(--o-color);
+  box-shadow: inset 0 0 0 1px rgba(255, 77, 109, 0.15);
+  text-shadow: 0 0 12px var(--o-color);
+  animation: popIn 0.22s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* Disabled (game over) */
+.cell.disabled {
+  cursor: not-allowed;
+}
+
+/* Winning cell highlight */
+.cell.winner.x {
+  background: rgba(0, 229, 255, 0.1);
+  box-shadow:
+    var(--win-glow-x),
+    inset 0 0 0 2px var(--x-color);
+  animation: winPulse 1.2s ease-in-out infinite alternate;
+}
+
+.cell.winner.o {
+  background: rgba(255, 77, 109, 0.1);
+  box-shadow:
+    var(--win-glow-o),
+    inset 0 0 0 2px var(--o-color);
+  animation: winPulse 1.2s ease-in-out infinite alternate;
+}
+
+/* ---------- Status Message ---------- */
+.status-message {
+  width: 100%;
+  text-align: center;
+  padding: 13px 20px;
+  border-radius: 12px;
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  animation: slideDown 0.3s ease both;
+}
+
+.status-message.win-x {
+  background: rgba(0, 229, 255, 0.08);
+  border: 1px solid rgba(0, 229, 255, 0.35);
+  color: var(--x-color);
+  text-shadow: 0 0 10px var(--x-color);
+}
+
+.status-message.win-o {
+  background: rgba(255, 77, 109, 0.08);
+  border: 1px solid rgba(255, 77, 109, 0.35);
+  color: var(--o-color);
+  text-shadow: 0 0 10px var(--o-color);
+}
+
+.status-message.draw {
+  background: rgba(255, 209, 102, 0.08);
+  border: 1px solid rgba(255, 209, 102, 0.35);
+  color: var(--draw-color);
+  text-shadow: 0 0 10px var(--draw-color);
+}
+
+.status-message.hidden {
+  display: none;
+}
+
+/* ---------- Scoreboard ---------- */
+.scoreboard {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+.score-block {
+  flex: 1;
+  background: #0a1220;
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 12px 8px;
+  text-align: center;
+}
+
+.score-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.score-value {
+  font-family: var(--font-display);
+  font-size: 1.9rem;
+  font-weight: 900;
+  line-height: 1;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.x-score .score-value {
+  color: var(--x-color);
+  text-shadow: 0 0 12px var(--x-color);
+}
+.o-score .score-value {
+  color: var(--o-color);
+  text-shadow: 0 0 12px var(--o-color);
+}
+.draw-score .score-value {
+  color: var(--draw-color);
+  text-shadow: 0 0 12px var(--draw-color);
+}
+
+/* Score bump animation */
+.score-bump {
+  animation: scoreBump 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ---------- Action Buttons ---------- */
+.action-buttons {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+.btn-restart,
+.btn-reset {
+  flex: 1;
+  padding: 12px;
+  border-radius: 12px;
+  border: none;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.btn-restart {
+  background: linear-gradient(135deg, var(--x-color) 0%, #0080ff 100%);
+  color: #080c14;
+  box-shadow: 0 4px 20px rgba(0, 229, 255, 0.25);
+}
+
+.btn-restart:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 28px rgba(0, 229, 255, 0.4);
+}
+
+.btn-restart:active {
+  transform: translateY(0);
+}
+
+.btn-reset {
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px solid var(--card-border);
+}
+
+.btn-reset:hover {
+  color: var(--o-color);
+  border-color: rgba(255, 77, 109, 0.4);
+  background: rgba(255, 77, 109, 0.05);
+}
+
+/* ---------- Sound Toggle ---------- */
+.sound-toggle {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid var(--card-border);
+  background: var(--card-bg);
+  font-size: 1.1rem;
+  cursor: pointer;
+  z-index: 10;
+  transition: all var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sound-toggle:hover {
+  border-color: var(--x-color);
+  box-shadow: 0 0 12px rgba(0, 229, 255, 0.2);
+  transform: scale(1.1);
+}
+
+.sound-toggle.muted {
+  opacity: 0.4;
+}
+
+/* ---------- Animations ---------- */
+@keyframes popIn {
+  0% {
+    transform: scale(0.4) rotate(-8deg);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+@keyframes winPulse {
+  from {
+    filter: brightness(1);
+  }
+  to {
+    filter: brightness(1.35);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes scoreBump {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.35);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 480px) {
+  .game-card {
+    padding: 28px 18px 24px;
+    gap: 16px;
+  }
+  .board {
+    gap: 7px;
+  }
+  .score-value {
+    font-size: 1.5rem;
+  }
+  .mode-btn {
+    font-size: 0.85rem;
+    padding: 8px 6px;
+  }
+}
